@@ -1,0 +1,224 @@
+/* css/style.css */
+
+/* =================================================================== */
+/* ===         SECCIÓN 1: VARIABLES, FUENTES Y GLOBALES          === */
+/* =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    /* Paleta TEMA CLARO (Catálogo) */
+    --clr-primary-light: #1d3557;
+    --clr-secondary-light: #457b9d;
+    --clr-accent-light: #e63946;
+    --clr-bg-light: #f8f9fa;
+    --clr-text-light: #212529;
+    --clr-text-on-dark: #ffffff;
+    --clr-border-light: #dee2e6;
+    
+    /* Paleta TEMA OSCURO (Detalle) */
+    --clr-primary-dark: #1d3557;
+    --clr-secondary-dark: #457b9d;
+    --clr-accent-dark: #e63946;
+    --clr-highlight-dark: #ffca3a;
+    --clr-glow-1-dark: #00f6ff;
+    --clr-glow-2-dark: #ff00c8;
+    --clr-bg-dark: radial-gradient(circle at top left, #4a5568, #1a202c);
+    --clr-text-dark: #f1faee;
+    
+    /* Paleta de colores por tipo de Pokémon (compartida) */
+    --type-fire: #FF6A59; --type-water: #58ABF6; --type-grass: #6CD271;
+    --type-electric: #F9DB55; --type-psychic: #F972A5; --type-ice: #79D0C1;
+    --type-dragon: #7A65E3; --type-dark: #72686A; --type-fairy: #F9ADF7;
+    --type-normal: #BDBDAE; --type-fighting: #C86C64; --type-flying: #A891EC;
+    --type-poison: #A96AC8; --type-ground: #E2C06A; --type-rock: #C3B179;
+    --type-bug: #B5C342; --type-ghost: #7874D4; --type-steel: #B5B5C3;
+
+    /* Estilos generales */
+    --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 15px 30px rgba(0, 0, 0, 0.12);
+    --border-radius: 16px;
+    --transition-fast: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--clr-text-light);
+    background-color: var(--clr-bg-light);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cg fill='%23e9ecef' fill-opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M0 0h20v1H0V0zm20 2v1H0V2h20zM0 4h20v1H0V4zm20 6v1H0v-1h20zM0 8h20v1H0V8zm20 10v1H0v-1h20zM0 12h20v1H0v-1z'/%3E%3C/g%3E%3C/svg%3E");
+    line-height: 1.6;
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+a { text-decoration: none; color: inherit; }
+
+
+/* =================================================================== */
+/* ===              SECCIÓN 2: TEMA CLARO (CATÁLOGO)             === */
+/* =================================================================== */
+
+header {
+    background: var(--clr-primary-light);
+    color: var(--clr-text-on-dark);
+    padding: 2rem 1rem;
+    text-align: center;
+    border-bottom: 5px solid var(--type-electric);
+    transition: all 0.5s ease;
+}
+.header-content { max-width: 1200px; margin: 0 auto; }
+header h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 0.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+#ramoncito {
+    background: transparent; border: none; color: var(--clr-text-on-dark); font-size: 1.8rem;
+    cursor: pointer; transition: var(--transition-fast); padding: 0.5rem;
+}
+#ramoncito:hover { transform: scale(1.2) rotate(15deg); color: var(--type-electric); }
+main { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+footer { background-color: var(--clr-text-light); color: var(--clr-text-on-dark); text-align: center; padding: 1.5rem; margin-top: 2rem; }
+#searchbar {
+    display: block; width: 100%; max-width: 600px; margin: 0 auto 2.5rem auto; padding: 1rem 1.5rem;
+    border: 2px solid var(--clr-border-light); border-radius: 50px; font-size: 1.1rem;
+    transition: var(--transition-fast); box-shadow: var(--shadow-md);
+}
+#searchbar:focus { outline: none; border-color: var(--clr-primary-light); box-shadow: 0 0 15px rgba(29, 53, 87, 0.3); }
+
+.pokemon-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2.5rem; perspective: 2000px; }
+.pokemon-card { position: relative; background-color: var(--clr-text-on-dark); border-radius: var(--border-radius); box-shadow: var(--shadow-md); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; opacity: 0; transform: translateY(30px); animation: card-entry 0.6s ease-out forwards; display: flex; flex-direction: column; }
+.pokemon-card:nth-child(n+1) { animation-delay: calc(n * 0.05s); }
+@keyframes card-entry { to { opacity: 1; transform: translateY(0); } }
+.pokemon-card:hover { transform: rotateY(5deg) rotateX(2deg) scale(1.05) translateZ(10px); box-shadow: 0 15px 30px var(--card-type-color-shadow, rgba(0, 0, 0, 0.12)); }
+
+.pokemon-card[data-type="fire"] { --card-type-color: var(--type-fire); --card-type-color-shadow: rgba(255, 106, 89, 0.3); }
+.pokemon-card[data-type="water"] { --card-type-color: var(--type-water); --card-type-color-shadow: rgba(88, 171, 246, 0.3); }
+.pokemon-card[data-type="grass"] { --card-type-color: var(--type-grass); --card-type-color-shadow: rgba(108, 210, 113, 0.3); }
+.pokemon-card[data-type="electric"] { --card-type-color: var(--type-electric); --card-type-color-shadow: rgba(249, 219, 85, 0.4); }
+.pokemon-card[data-type="psychic"] { --card-type-color: var(--type-psychic); --card-type-color-shadow: rgba(249, 114, 165, 0.3); }
+.pokemon-card[data-type="normal"] { --card-type-color: var(--type-normal); --card-type-color-shadow: rgba(189, 189, 174, 0.3); }
+.pokemon-card[data-type="fighting"] { --card-type-color: var(--type-fighting); --card-type-color-shadow: rgba(200, 108, 100, 0.3); }
+
+.pokemon-card::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: var(--border-radius); background: linear-gradient(135deg, var(--card-type-color, transparent), transparent 60%); opacity: 0; transition: opacity 0.4s ease-out; pointer-events: none; }
+.pokemon-card:hover::after { opacity: 0.2; }
+.image-container, .card-info { transform: translateZ(20px); }
+.image-container { position: relative; width: 100%; padding-top: 140%; background-color: #e9ecef; border-radius: var(--border-radius) var(--border-radius) 0 0; }
+.pokemon-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; padding: 0.5rem; opacity: 0; transition: opacity 0.4s ease-in-out; }
+.image-container.loaded .pokemon-image { opacity: 1; }
+.card-info { padding: 1rem; text-align: center; border-top: 4px solid var(--card-type-color, var(--clr-border-light)); flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.card-info h2 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--clr-text-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ver-button { display: inline-block; background: var(--card-type-color, var(--clr-primary-light)); color: var(--clr-text-on-dark); font-weight: 600; border-radius: 50px; padding: 0.7rem 1.5rem; transition: var(--transition-fast); transform: translateZ(40px); border: none; box-shadow: 0 4px 15px var(--card-type-color-shadow, rgba(0,0,0,0.2)); cursor: pointer; }
+.ver-button:hover { transform: translateZ(40px) scale(1.05); filter: brightness(1.1); }
+
+
+/* =================================================================== */
+/* ===              SECCIÓN 3: TEMA OSCURO (DETALLE)             === */
+/* =================================================================== */
+
+body.theme-detail {
+    background: var(--clr-bg-dark);
+    color: var(--clr-text-dark);
+}
+.theme-detail header {
+    background: transparent;
+    border-bottom: none;
+}
+.theme-detail header h1 {
+    text-shadow: none;
+}
+.theme-detail footer {
+    background-color: rgba(0,0,0,0.2);
+    color: var(--clr-text-dark);
+}
+.theme-detail main {
+    animation: fadeInDetail 1s ease-out;
+}
+@keyframes fadeInDetail { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.theme-detail .pokemon-card-detail {
+    max-width: 950px; margin: 1.5rem auto; display: flex; flex-wrap: wrap; /* Cambiado a flex-wrap */
+    gap: 1.5rem; padding: 1.5rem;
+    background: rgba(41, 51, 71, 0.7); border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.theme-detail .header-back-link { width: 100%; text-align: left; font-size: 1rem; font-weight: 600; opacity: 0.8; transition: all 0.25s; }
+.theme-detail .header-back-link:hover { opacity: 1; color: var(--clr-highlight-dark); transform: translateX(-5px); }
+.theme-detail .detail-image-wrapper { position: relative; display: grid; place-items: center; width: 100%; }
+.theme-detail .detail-image { max-width: 100%; width: 300px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease-in-out; }
+.theme-detail .detail-info-wrapper { width: 100%; }
+.theme-detail .detail-info-wrapper h2 { font-size: clamp(2.5rem, 8vw, 3.5rem); font-weight: 700; margin-bottom: 1.5rem; text-shadow: 0 0 15px rgba(255,255,255,0.3); }
+.theme-detail .card-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.theme-detail .meta-item { background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px; display: flex; flex-direction: column; }
+.theme-detail .meta-item strong { display: block; font-size: 0.9rem; opacity: 0.7; margin-bottom: 0.5rem; text-transform: uppercase; }
+.theme-detail .meta-item span, .theme-detail .meta-item div { font-size: 1.1rem; font-weight: 600; }
+.theme-detail .set-info div { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.theme-detail .set-info div > span { flex-grow: 1; min-width: 0; }
+.theme-detail .set-logo { height: 24px; object-fit: contain; flex-shrink: 0; }
+.theme-detail .purchase-section { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 1.2rem; margin-top: 1.5rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.2rem; }
+.theme-detail #card-price { color: var(--clr-highlight-dark); }
+.theme-detail .buy-button { background: linear-gradient(45deg, var(--clr-glow-1-dark), var(--clr-glow-2-dark)); color: var(--clr-primary-dark); border: none; border-radius: 10px; padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 20px rgba(0, 246, 255, 0.4); }
+.theme-detail .buy-button:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 246, 255, 0.7); }
+.theme-detail .buy-button:disabled { background: var(--clr-secondary-dark); box-shadow: none; cursor: not-allowed; opacity: 0.6; transform: none; }
+.theme-detail .quantity-control input { width: 60px; padding: 0.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.2); color: var(--clr-text-dark); font-size: 1.2rem; text-align: center; }
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 850px) {
+    .theme-detail .pokemon-card-detail { backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
+    .theme-detail .detail-image-wrapper::before { content: ""; position: absolute; inset: -10px; border-radius: 20px; background: conic-gradient(from 0deg, var(--clr-glow-1-dark), var(--clr-glow-2-dark), var(--clr-glow-1-dark)); filter: blur(20px); opacity: 0; transition: opacity 0.5s; animation: rotateGradient 4s linear infinite; z-index: -1; }
+    @keyframes rotateGradient { to { transform: rotate(360deg); } }
+    .theme-detail .detail-image-wrapper:hover::before { opacity: 0.7; }
+    .theme-detail .detail-image-wrapper:hover .detail-image { transform: scale(1.05); }
+}
+@media (min-width: 850px) {
+    .theme-detail .pokemon-card-detail { flex-direction: row; align-items: flex-start; gap: 2.5rem; }
+    .theme-detail .header-back-link { order: -1; /* Pone el botón primero */ margin-bottom: 1.5rem; }
+    .theme-detail .detail-image-wrapper { flex: 0 0 380px; position: sticky; top: 2.5rem; width: auto; }
+    .theme-detail .detail-info-wrapper { flex: 1; width: auto; }
+}
+
+
+/* =================================================================== */
+/* ===        SECCIÓN 4: ESTILOS COMPARTIDOS (CARRITO, ETC.)     === */
+/* =================================================================== */
+
+.cart-container { position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; background: linear-gradient(45deg, var(--clr-glow-1-dark), var(--clr-glow-2-dark)); border-radius: 50%; display: grid; place-items: center; box-shadow: 0 5px 20px rgba(0, 246, 255, 0.5); cursor: pointer; transition: transform 0.3s ease; z-index: 1000; }
+.cart-container:hover { transform: scale(1.1); }
+.cart-container svg { color: var(--clr-primary-dark); }
+.cart-badge { position: absolute; top: -5px; right: -5px; background-color: var(--clr-accent-dark); color: var(--clr-text-dark); border-radius: 50%; width: 24px; height: 24px; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: 700; border: 2px solid var(--clr-text-dark); transition: opacity 0.3s ease, transform 0.3s ease; transform: scale(1); opacity: 1; }
+.cart-badge.hidden { transform: scale(0); opacity: 0; }
+.cart-modal { animation: fadeInModal 0.3s ease-out; }
+.cart-modal.closing { animation: fadeOutModal 0.3s ease-in forwards; }
+@keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOutModal { from { opacity: 1; } to { opacity: 0; } }
+.cart-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1999; }
+.cart-modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 500px; max-height: 80vh; background: #2d3748; color: var(--clr-text-dark); border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); z-index: 2000; display: flex; flex-direction: column; overflow: hidden; animation: slideInModal 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.cart-modal.closing .cart-modal-content { animation: slideOutModal 0.3s ease-in forwards; }
+@keyframes slideInModal { from { transform: translate(-50%, -40%); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+@keyframes slideOutModal { from { transform: translate(-50%, -50%); opacity: 1; } to { transform: translate(-50%, -60%); opacity: 0; } }
+.cart-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.cart-modal-header h2 { margin: 0; font-size: 1.5rem; }
+.cart-modal-close-btn { background: none; border: none; color: var(--clr-text-dark); font-size: 2.5rem; line-height: 1; cursor: pointer; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; }
+.cart-modal-close-btn:hover { opacity: 1; transform: rotate(90deg); }
+.cart-modal-body { padding: 1.5rem; overflow-y: auto; flex-grow: 1; }
+.cart-empty-message { text-align: center; font-size: 1.1rem; opacity: 0.8; padding: 2rem 0; }
+.cart-item { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.cart-item:last-child { border-bottom: none; }
+.cart-item-image { width: 60px; height: auto; border-radius: 5px; background-color: rgba(255,255,255,0.1); }
+.cart-item-details { flex-grow: 1; }
+.cart-item-name { display: block; font-weight: 600; }
+.cart-item-price { font-size: 0.9rem; opacity: 0.8; }
+.cart-item-actions { display: flex; align-items: center; gap: 0.5rem; }
+.cart-item-quantity-input { width: 50px; padding: 0.3rem; text-align: center; border: 1px solid var(--clr-secondary-dark); background-color: rgba(0,0,0,0.2); color: var(--clr-text-dark); border-radius: 5px; }
+.cart-item-remove { background-color: var(--clr-accent-dark); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; font-size: 1.2rem; line-height: 1; cursor: pointer; transition: all 0.2s; }
+.cart-item-remove:hover { background-color: #c53030; transform: scale(1.1); }
+.cart-modal-footer { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background-color: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.1); }
+.cart-total { font-size: 1.2rem; }
+.cart-total strong { opacity: 0.8; }
+#cart-total-price { font-weight: 700; color: var(--clr-highlight-dark); }
+.checkout-button { background: var(--clr-highlight-dark); color: var(--clr-primary-dark); border: none; padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: filter 0.2s; }
+.checkout-button:hover { filter: brightness(1.1); }
+.purchase-success-message { text-align: center; padding: 2rem 1rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.purchase-success-message p:first-child { font-size: 4rem; line-height: 1; animation: bounce 0.8s ease; }
+.purchase-success-message h3 { font-size: 1.8rem; color: var(--clr-highlight-dark); }
+.purchase-success-message p { font-size: 1.1rem; opacity: 0.9; max-width: 300px; margin: 0 auto; }
+@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-10px); } }
+
+.view { display: none; }
+.view.active-view { display: block; }
